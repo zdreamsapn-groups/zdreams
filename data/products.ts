@@ -1,0 +1,60 @@
+export const products = [
+  {
+    id: 1,
+    slug: "personalized-mug",
+    name: "Personalized Mug",
+    type: "physical",
+    category: "Mugs",
+    image: "/images/product/mug.jpg",
+    price: 25.99,
+    description:
+      "Premium ceramic mugs fully customized with your name, photo, logo, artwork, or special message. Perfect for gifts, cafés, corporate branding, and events.",
+    features: [
+      "Premium ceramic material",
+      "Custom name, photo, logo & artwork printing",
+      "Full-color printing",
+      "Dishwasher and microwave safe",
+      "Gift ready",
+      "Multiple sizes available",
+      "Bulk orders available",
+    ],
+  },
+  {
+    id: 2,
+    slug: "event-website-design",
+    name: "Event Website Design",
+    type: "digital",
+    category: "Website Design",
+    image: "/images/product/website-design.svg",
+    price: 59,
+    description:
+      "Beautiful custom websites designed for weddings, birthdays, baby showers, and all your special events — with RSVP, gallery, and countdown features.",
+    features: [
+      "Wedding websites",
+      "Birthday event websites",
+      "Baby shower websites",
+      "Countdown timer",
+      "RSVP & guest management",
+      "Photo gallery",
+    ],
+  },
+  {
+    id: 3,
+    slug: "event-invitation-design",
+    name: "Event Invitation Design",
+    type: "digital",
+    category: "Event Invitations",
+    image: "/images/product/event-invitation.svg",
+    price: 8.99,
+    description:
+      "Beautiful custom digital invitations for weddings, birthdays, baby showers, and all special occasions — delivered as print-ready and shareable files.",
+    features: [
+      "Wedding invitations",
+      "Birthday invitations",
+      "Baby shower invitations",
+      "Print-ready PDF & image files",
+      "WhatsApp / social media shareable",
+      "Custom colors, names & artwork",
+    ],
+  },
+];

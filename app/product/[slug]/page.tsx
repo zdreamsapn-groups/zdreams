@@ -20,6 +20,10 @@ type Props = {
   }>;
 };
 
+export function generateStaticParams() {
+  return products.map((product) => ({ slug: product.slug }));
+}
+
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
 
@@ -289,7 +293,7 @@ export default async function ProductPage({ params }: Props) {
         <div className="mt-12">
           <CtaBanner
             title="Ready to Customize This Product?"
-            description="Upload your logo, artwork, or design and receive a personalized quotation from our expert team."
+            description="Send us your logo, artwork, or design and receive a personalized quotation from our expert team."
             primaryLabel="Get Free Quote"
           />
         </div>

@@ -15,7 +15,7 @@ const stats = [
     icon: Sparkles,
   },
   {
-    value: "2+",
+    value: "3+",
     label: "Product Lines",
     icon: PackageCheck,
   },

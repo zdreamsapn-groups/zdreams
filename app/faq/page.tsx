@@ -24,7 +24,7 @@ const faqs = [
   {
     question: "How do I place a custom order?",
     answer:
-      "Browse our products, choose the item you want, complete the Custom Order Request form, upload your design or photo, and submit your request. We'll contact you with a final quotation.",
+      "Browse our products, choose the item you want, complete the Custom Order Request form, and submit your request. We'll contact you with a final quotation. After you approve the quote, you can share your design or photo with us over WhatsApp or email.",
   },
   {
     question: "Do you ship internationally?",
@@ -32,9 +32,9 @@ const faqs = [
       "Yes. ZDreams accepts custom orders from customers around the world.",
   },
   {
-    question: "What file formats can I upload?",
+    question: "What file formats can I share for my design?",
     answer:
-      "You can upload JPG, JPEG, PNG, SVG and PDF files for customization.",
+      "You can share design files in JPG, JPEG, PNG, SVG and PDF formats with us over WhatsApp or email after your quote is confirmed.",
   },
   {
     question: "How long does production take?",

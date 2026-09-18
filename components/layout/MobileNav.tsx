@@ -17,11 +17,7 @@ import {
   Mail,
   MessageCircle,
 } from "lucide-react";
-import {
-  FaFacebookF,
-  FaInstagram,
-  FaLinkedinIn,
-} from "react-icons/fa";
+import SocialIcons from "./SocialIcons";
 
 type Props = {
   open: boolean;
@@ -59,12 +55,6 @@ const navItems = [
     href: "/contact",
     icon: Phone,
   },
-];
-
-const socials = [
-  { name: "Facebook", href: "#", icon: FaFacebookF },
-  { name: "Instagram", href: "#", icon: FaInstagram },
-  { name: "LinkedIn", href: "#", icon: FaLinkedinIn },
 ];
 
 export default function MobileNav({ open, setOpen }: Props) {
@@ -201,20 +191,8 @@ export default function MobileNav({ open, setOpen }: Props) {
               </div>
 
               {/* Social Icons */}
-              <div className="mt-5 flex justify-center gap-3">
-                {socials.map((social) => {
-                  const Icon = social.icon;
-
-                  return (
-                    <a
-                      key={social.name}
-                      href={social.href}
-                      className="rounded-xl border border-amber-100 bg-white p-2.5 text-amber-600 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-amber-500 hover:bg-amber-500 hover:text-white"
-                    >
-                      <Icon size={14} />
-                    </a>
-                  );
-                })}
+              <div className="mt-5 flex justify-center">
+                <SocialIcons />
               </div>
 
               <p className="mt-5 text-center text-xs text-gray-500">

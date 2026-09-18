@@ -7,7 +7,7 @@ import clsx from "clsx";
 const navItems = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
-  { name: "Products", href: "/product" }, // change to /products if you rename the folder
+  { name: "Products", href: "/product" },
   { name: "Gallery", href: "/gallery" },
   { name: "FAQ", href: "/faq" },
   { name: "Contact", href: "/contact" },

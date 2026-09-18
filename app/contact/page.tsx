@@ -10,6 +10,7 @@ import {
   Clock,
 } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
+import ContactForm from "@/components/forms/ContactForm";
 
 const fadeLeft = {
   hidden: {
@@ -109,7 +110,12 @@ export default function ContactPage() {
                   <p className="text-sm font-semibold text-gray-900">
                     Phone
                   </p>
-                  <p className="text-sm text-gray-600">+91 XXXXX XXXXX</p>
+                  <a
+                    href="tel:+917200535609"
+                    className="text-sm text-amber-700 hover:underline"
+                  >
+                    +91 7200535609
+                  </a>
                 </div>
               </div>
 
@@ -198,7 +204,7 @@ export default function ContactPage() {
               </h3>
 
               <p className="mt-3 text-sm leading-6 text-amber-100">
-                Upload your logo, artwork or design and receive a
+                Send us your logo, artwork or design and receive a
                 personalized quotation from our team within 24 hours.
               </p>
 
@@ -212,6 +218,28 @@ export default function ContactPage() {
           </motion.div>
 
         </div>
+
+        {/* Contact Form */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mt-6 rounded-3xl border border-amber-100 bg-white p-7 shadow-sm"
+        >
+          <h2 className="text-xl font-extrabold tracking-tight text-gray-900">
+            Send Us a Message
+          </h2>
+
+          <p className="mt-2 text-sm text-gray-600">
+            Fill in the form below and our team will get back to you within 24
+            hours.
+          </p>
+
+          <div className="mt-6">
+            <ContactForm />
+          </div>
+        </motion.div>
 
         {/* Quick Response */}
         <motion.div

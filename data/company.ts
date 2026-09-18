@@ -11,8 +11,9 @@ export const company = {
     "ZDreams creates customized mugs and beautiful event websites for weddings, birthdays, baby showers, and all special occasions.",
 
   social: {
-    instagram: "",
     facebook: "",
+    instagram: "",
+    linkedin: "",
     pinterest: "",
     etsy: "",
   },

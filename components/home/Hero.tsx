@@ -67,10 +67,10 @@ export default function Hero() {
           {/* Compact Stats */}
           <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[
-              ["50+", "Happy Customers"],
+              ["1000+", "Happy Customers"],
               ["3+", "Product Lines"],
-              ["10+", "Countries Served"],
-              ["24/7", "Support"],
+              ["50+", "Countries Served"],
+              ["24hr", "Reply Time"],
             ].map(([title, subtitle]) => (
               <div
                 key={title}
@@ -103,8 +103,8 @@ export default function Hero() {
             <Image
               src="/images/hero/hero-banner.jpg"
               alt="ZDreams Customized Products"
-              width={500}
-              height={0}
+              width={757}
+              height={488}
               priority
               className="h-auto w-full rounded-2xl object-contain"
             />

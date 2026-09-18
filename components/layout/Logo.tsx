@@ -3,13 +3,14 @@ import Link from "next/link";
 
 export default function Logo() {
   return (
-    <Link href="/" className="flex items-center ">
+    <Link href="/" className="flex items-center">
       <Image
         src="/logo/logo.png"
         alt="ZDreams Logo"
         width={90}
         height={90}
         priority
+        className="h-auto w-auto"
       />
 
       <div>

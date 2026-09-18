@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { Globe, Menu, X } from "lucide-react";
 import Logo from "./Logo";
 import DesktopNav from "./DesktopNav";
-import MobileNav from "./MobileNav";
+
+const MobileNav = dynamic(() => import("./MobileNav"), { ssr: false });
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -37,6 +39,7 @@ export default function Header() {
 
             <button
               onClick={() => setOpen(!open)}
+              aria-label={open ? "Close menu" : "Open menu"}
               className="rounded-xl border p-2 lg:hidden"
             >
               {open ? (

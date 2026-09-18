@@ -17,7 +17,7 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-6">
           <CtaBanner
             title="Ready to Create Something Unique?"
-            description="Personalized mugs and custom event websites — upload your idea and receive a free quote within 24 hours."
+            description="Personalized mugs and custom event websites — share your idea and receive a free quote within 24 hours."
           />
         </div>
       </section>

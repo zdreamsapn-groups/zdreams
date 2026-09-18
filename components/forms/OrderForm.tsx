@@ -1,19 +1,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import emailjs from "@emailjs/browser";
+import { toast } from "sonner";
 import { Coffee, MonitorSmartphone, MailPlus } from "lucide-react";
 
 import { pricing, DELIVERY_FEE } from "@/data/pricing";
 import { countries } from "@/data/countries";
 import CustomSelect from "@/components/forms/CustomSelect";
-
-const EMAILJS_SERVICE_ID =
-  process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ?? "service_9yqx0si";
-const EMAILJS_TEMPLATE_ID =
-  process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? "template_le4q6ur";
-const EMAILJS_PUBLIC_KEY =
-  process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY ?? "2Ir1ytvXn2pVDhZcq";
+import { HONEYPOT_FIELD, isRateLimited } from "@/lib/antispam";
 
 type FormData = {
   fullName: string;
@@ -84,8 +78,6 @@ export default function OrderForm() {
   const [qty, setQty] = useState(1);
   const isDigital = category !== "Mugs";
 
-  const [files, setFiles] = useState<File[]>([]);
-
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState<FormData>({
@@ -106,6 +98,8 @@ export default function OrderForm() {
   const [errors, setErrors] = useState<
     Partial<Record<keyof FormData, string>>
   >({});
+
+  const [honeypot, setHoneypot] = useState("");
 
   const unitPrice =
     pricing[category as keyof typeof pricing] || 0;
@@ -223,30 +217,58 @@ export default function OrderForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const fileToBase64 = (file: File): Promise<string> =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(String(reader.result));
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
+
+    if (honeypot) {
+      toast.success("Order request sent successfully!");
+      return;
+    }
+
+    if (isRateLimited()) {
+      toast.error("Please wait a moment before submitting again.");
+      return;
+    }
 
     if (!validate()) return;
 
     setLoading(true);
 
     try {
+      const formattedFields = [
+        ["Full Name", form.fullName],
+        ["Email", form.email],
+        ["Country", form.country],
+        ["WhatsApp Number", `${form.countryCode} ${form.phone}`],
+        ["Company", form.company],
+        ["Category", category],
+        ["Product / Website Name", form.productName],
+        ["Event Type", form.eventType],
+        ["Event Date", form.eventDate],
+        ["Quantity", String(qty)],
+        ["Estimated Unit Price", `$${unitPrice.toFixed(2)}`],
+        ["Delivery Fee", `$${deliveryFee.toFixed(2)}`],
+        ["Estimated Total", `$${total}`],
+        ["Requirements / Customization", form.instructions],
+        ["Delivery Address", form.address],
+      ] as const;
+
+      const message = `New ZDreams Order Request\n\n${formattedFields
+        .filter(([, value]) => value)
+        .map(([label, value]) => `${label}: ${value}`)
+        .join("\n")}`;
+
       const templateParams: Record<string, unknown> = {
+        reply_to: form.email,
+        from_email: form.email,
+        from_name: form.fullName || form.email,
         fullName: form.fullName,
         email: form.email,
         country: form.country,
         countryCode: form.countryCode,
-        phone: form.phone,
+        phone: `${form.countryCode} ${form.phone}`,
         company: form.company,
         category,
         productName: form.productName,
@@ -255,27 +277,23 @@ export default function OrderForm() {
         quantity: String(qty),
         instructions: form.instructions,
         address: form.address,
-        unitPrice: String(unitPrice),
-        deliveryFee: String(deliveryFee),
-        total,
-        filesSummary:
-          files.length > 0
-            ? files.map((f) => `${f.name} (${(f.size / 1024).toFixed(1)} KB)`).join(", ")
-            : "None",
+        unitPrice: `$${unitPrice.toFixed(2)}`,
+        deliveryFee: `$${deliveryFee.toFixed(2)}`,
+        total: `$${total}`,
+        message,
       };
 
-      for (let i = 0; i < files.length; i++) {
-        templateParams[`attachment${i + 1}`] = await fileToBase64(files[i]);
+      const { ok } = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ kind: "quote", params: templateParams }),
+      });
+
+      if (!ok) {
+        throw new Error("Send failed");
       }
 
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        templateParams,
-        { publicKey: EMAILJS_PUBLIC_KEY }
-      );
-
-      alert("✅ Order request sent successfully!");
+      toast.success("Order request sent successfully!");
 
       setForm({
         fullName: "",
@@ -293,10 +311,11 @@ export default function OrderForm() {
 
       setCategory("Mugs");
       setQty(1);
-      setFiles([]);
 
     } catch {
-      alert("❌ Unable to send your request.");
+      toast.error(
+        "Unable to send your request. Please try again or reach us directly on WhatsApp."
+      );
     } finally {
       setLoading(false);
     }
@@ -307,6 +326,18 @@ export default function OrderForm() {
       onSubmit={handleSubmit}
       className="rounded-3xl border border-amber-100 bg-white p-6 shadow-lg lg:p-7"
     >
+      <div className="absolute -left-[9999px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+        <label htmlFor={HONEYPOT_FIELD}>Website</label>
+        <input
+          id={HONEYPOT_FIELD}
+          name={HONEYPOT_FIELD}
+          type="text"
+          value={honeypot}
+          onChange={(e) => setHoneypot(e.target.value)}
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
 
       {/* ================= Customer Information ================= */}
       <section>
@@ -536,7 +567,9 @@ export default function OrderForm() {
                   type="number"
                   min={1}
                   value={qty}
-                  onChange={(e) => setQty(Number(e.target.value))}
+                  onChange={(e) =>
+                    setQty(Math.max(1, Math.min(Number(e.target.value) || 1, 10000)))
+                  }
                   className={inputClass(false)}
                 />
               </div>
@@ -626,59 +659,6 @@ export default function OrderForm() {
               className={`${inputClass(!!errors.instructions)} leading-6`}
             />
             <FieldError message={errors.instructions} />
-          </div>
-
-          {/* Upload Design */}
-          <div>
-            <FieldLabel optional>
-              {isDigital ? "Upload References / Photos" : "Upload Your Design"}
-            </FieldLabel>
-            <input
-              type="file"
-              multiple
-              accept=".jpg,.jpeg,.png,.svg,.pdf,.ai,.psd"
-              onChange={(e) => {
-                const selected = Array.from(e.target.files ?? []);
-                const totalBytes = selected.reduce((sum, f) => sum + f.size, 0);
-                if (totalBytes > 20 * 1024 * 1024) {
-                  alert("Total file size must not exceed 20 MB.");
-                  e.target.value = "";
-                  setFiles([]);
-                  return;
-                }
-                setFiles(selected);
-              }}
-              className="block w-full rounded-xl border-2 border-dashed border-amber-200 bg-amber-50/50 p-4 text-sm text-gray-500
-              file:mr-4
-              file:rounded-lg
-              file:border-0
-              file:bg-amber-600
-              file:px-4
-              file:py-2
-              file:text-xs
-              file:font-semibold
-              file:text-white
-              hover:file:bg-amber-700"
-            />
-            <p className="mt-1.5 text-xs text-gray-400">
-              JPG, PNG, SVG, PDF, AI, PSD · up to 20 MB total
-            </p>
-
-            {files.length > 0 && (
-              <ul className="mt-3 space-y-1.5">
-                {files.map((file) => (
-                  <li
-                    key={`${file.name}-${file.size}`}
-                    className="flex items-center justify-between rounded-xl border border-amber-100 bg-white px-4 py-2 text-xs font-medium text-gray-700"
-                  >
-                    <span className="truncate">{file.name}</span>
-                    <span className="ml-3 shrink-0 text-gray-400">
-                      {(file.size / 1024).toFixed(1)} KB
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            )}
           </div>
 
           {/* Delivery address — physical only */}

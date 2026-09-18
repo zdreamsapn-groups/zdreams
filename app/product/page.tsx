@@ -1,7 +1,7 @@
 "use client";
 
-import { Suspense, useMemo } from "react";
-import { useSearchParams } from "next/navigation";
+import { Suspense, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -42,7 +42,9 @@ export default function ProductPage() {
 
 function ProductContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const search = searchParams.get("search") ?? "";
+  const [query, setQuery] = useState(search);
 
   const filteredProducts = useMemo(() => {
     if (!search) return products;
@@ -74,6 +76,47 @@ function ProductContent() {
           title="Our Products"
           subtitle="Premium customized mugs and beautiful event websites, designed for gifts, branding and personal use."
         />
+
+        {/* Search Box */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="mx-auto mt-10 w-full max-w-xl"
+        >
+          <div className="flex items-center gap-2 rounded-2xl border border-amber-200 bg-white px-4 py-3 shadow-sm focus-within:border-amber-500 focus-within:ring-2 focus-within:ring-amber-100">
+            <Search className="h-5 w-5 shrink-0 text-amber-600" />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                const value = e.target.value.trim();
+                router.replace(
+                  value
+                    ? `/product?search=${encodeURIComponent(value)}`
+                    : "/product",
+                  { scroll: false }
+                );
+              }}
+              placeholder="Search mugs, websites, invitations..."
+              className="w-full bg-transparent text-sm text-gray-900 outline-none placeholder:text-gray-400"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => {
+                  setQuery("");
+                  router.replace("/product", { scroll: false });
+                }}
+                aria-label="Clear search"
+                className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-500 transition hover:bg-amber-100 hover:text-amber-700"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+        </motion.div>
 
         {/* Search Results Banner */}
         {search && (

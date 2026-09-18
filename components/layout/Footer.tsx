@@ -1,21 +1,14 @@
-"use client";
-
 import Link from "next/link";
 import {
   Mail,
   Phone,
   MapPin,
-  Send,
   ArrowRight,
   Heart,
-  ArrowUp,
 } from "lucide-react";
 
-import {
-  FaFacebookF,
-  FaInstagram,
-  FaLinkedinIn,
-} from "react-icons/fa";
+import SocialIcons from "./SocialIcons";
+import { NewsletterForm, BackToTop } from "./FooterInteractive";
 
 const links = [
   { name: "Home", href: "/" },
@@ -25,24 +18,6 @@ const links = [
   { name: "FAQ", href: "/faq" },
   { name: "Request Quote", href: "/request-quote" },
   { name: "Contact", href: "/contact" },
-];
-
-const socials = [
-  {
-    name: "Facebook",
-    href: "#",
-    icon: FaFacebookF,
-  },
-  {
-    name: "Instagram",
-    href: "#",
-    icon: FaInstagram,
-  },
-  {
-    name: "LinkedIn",
-    href: "#",
-    icon: FaLinkedinIn,
-  },
 ];
 
 export default function Footer() {
@@ -72,19 +47,7 @@ export default function Footer() {
             </p>
 
             <div className="mt-6 flex gap-3">
-              {socials.map((social) => {
-                const Icon = social.icon;
-
-                return (
-                  <Link
-                    key={social.name}
-                    href={social.href}
-                    className="rounded-xl border border-amber-100 bg-white p-2.5 text-amber-600 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-amber-500 hover:bg-amber-500 hover:text-white hover:shadow-lg"
-                  >
-                    <Icon size={15} />
-                  </Link>
-                );
-              })}
+              <SocialIcons />
             </div>
           </div>
 
@@ -173,22 +136,7 @@ export default function Footer() {
               exclusive deals.
             </p>
 
-            <form
-              onSubmit={(e) => e.preventDefault()}
-              className="mt-5 flex overflow-hidden rounded-xl border border-amber-200 bg-white shadow-sm focus-within:ring-2 focus-within:ring-amber-100"
-            >
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="flex-1 bg-transparent px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none"
-              />
-              <button
-                type="submit"
-                className="bg-gradient-to-r from-amber-600 to-yellow-500 px-4 text-white transition hover:from-amber-700 hover:to-yellow-600"
-              >
-                <Send size={16} />
-              </button>
-            </form>
+            <NewsletterForm />
 
             <div className="mt-5 rounded-2xl border border-amber-100 bg-white p-4 shadow-sm">
               <h4 className="text-sm font-bold text-amber-700">
@@ -242,15 +190,7 @@ export default function Footer() {
             </div>
 
             {/* Back to Top */}
-            <button
-              onClick={() =>
-                window.scrollTo({ top: 0, behavior: "smooth" })
-              }
-              className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-amber-600 to-yellow-500 px-5 py-2.5 text-xs font-bold text-white shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
-            >
-              Back to Top
-              <ArrowUp className="h-3.5 w-3.5" />
-            </button>
+            <BackToTop />
           </div>
         </div>
 

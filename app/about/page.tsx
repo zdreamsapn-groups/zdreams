@@ -112,7 +112,7 @@ export default function AboutPage() {
               },
               {
                 icon: <Gift className="mx-auto h-6 w-6 text-amber-600" />,
-                title: "2+",
+                title: "3+",
                 subtitle: "Product Lines",
               },
               {

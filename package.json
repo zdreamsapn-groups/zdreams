@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "node scripts/obfuscate.mjs",
     "start": "next start",
     "lint": "eslint"
   },
@@ -24,6 +25,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.11",
+    "javascript-obfuscator": "^5.7.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

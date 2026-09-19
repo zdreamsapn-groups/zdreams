@@ -24,6 +24,23 @@ export function generateStaticParams() {
   return products.map((product) => ({ slug: product.slug }));
 }
 
+export async function generateMetadata({ params }: Props) {
+  const { slug } = await params;
+  const product = products.find((item) => item.slug === slug);
+
+  if (!product) return {};
+
+  return {
+    title: product.name,
+    description: product.description,
+    openGraph: {
+      title: `${product.name} | ZDreams`,
+      description: product.description,
+      images: [{ url: product.image, width: 200, height: 200, alt: product.name }],
+    },
+  };
+}
+
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
 
@@ -136,7 +153,7 @@ export default async function ProductPage({ params }: Props) {
 
                 {product.type === "physical" && (
                   <span className="pb-1 text-sm font-medium text-green-700">
-                    + $17.99 delivery
+                    + $17.99 delivery (1st mug)
                   </span>
                 )}
               </div>
@@ -144,7 +161,7 @@ export default async function ProductPage({ params }: Props) {
               <p className="mt-2 text-sm text-gray-600">
                 {product.type === "digital"
                   ? "Final quotation depends on pages and features."
-                  : "Final quotation depends on quantity and customization. Delivery adds $17.99."}
+                  : "Final quotation depends on quantity and customization. Delivery is $17.99 for the first mug and $14.99 for each additional mug."}
               </p>
             </div>
 
@@ -201,7 +218,7 @@ export default async function ProductPage({ params }: Props) {
               <h3 className="mt-1 text-sm font-bold text-gray-900">
                 {product.type === "digital"
                   ? "Instant (Digital)"
-                  : "Worldwide + $17.99"}
+                  : "Worldwide (from $17.99)"}
               </h3>
             </div>
           </div>

@@ -5,3 +5,4 @@ export const pricing = {
 };
 
 export const DELIVERY_FEE = 17.99;
+export const ADDITIONAL_ITEM_DELIVERY_FEE = 14.99;

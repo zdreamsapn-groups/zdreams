@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   Mail,
   Phone,
@@ -32,9 +33,18 @@ export default function Footer() {
           {/* Company */}
           <div>
             <Link href="/" className="flex items-center gap-3">
-              <h2 className="text-2xl font-extrabold tracking-tight text-gray-900">
-                Z<span className="text-amber-600">Dreams</span>
-              </h2>
+              <Image
+                src="/logo/logo.png"
+                alt="ZDreams Logo"
+                width={56}
+                height={56}
+                className="h-auto w-auto"
+              />
+              <div>
+                <h2 className="text-2xl font-extrabold tracking-tight text-gray-900">
+                  Z<span className="text-amber-600">Dreams</span>
+                </h2>
+              </div>
             </Link>
 
             <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-600">

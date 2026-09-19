@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Coffee, MonitorSmartphone, MailPlus } from "lucide-react";
 
-import { pricing, DELIVERY_FEE } from "@/data/pricing";
+import { pricing, DELIVERY_FEE, ADDITIONAL_ITEM_DELIVERY_FEE } from "@/data/pricing";
 import { countries } from "@/data/countries";
 import CustomSelect from "@/components/forms/CustomSelect";
 import { HONEYPOT_FIELD, isRateLimited } from "@/lib/antispam";
@@ -104,7 +104,9 @@ export default function OrderForm() {
   const unitPrice =
     pricing[category as keyof typeof pricing] || 0;
 
-  const deliveryFee = isDigital ? 0 : DELIVERY_FEE;
+  const deliveryFee = isDigital
+    ? 0
+    : DELIVERY_FEE + ADDITIONAL_ITEM_DELIVERY_FEE * (qty - 1);
 
   const total = useMemo(() => {
     return (unitPrice * qty + deliveryFee).toFixed(2);
@@ -153,9 +155,11 @@ export default function OrderForm() {
     Australia: "+61",
     Germany: "+49",
     France: "+33",
+    Netherlands: "+31",
     Italy: "+39",
     Spain: "+34",
     Japan: "+81",
+    "South Korea": "+82",
     China: "+86",
     Singapore: "+65",
     Malaysia: "+60",
@@ -614,9 +618,16 @@ export default function OrderForm() {
         </div>
 
         {!isDigital && (
-          <div className="mt-3 flex items-center justify-between rounded-xl bg-white/15 px-4 py-2 text-xs text-white/90">
-            <span>Delivery fee ({qty > 1 ? "one order" : "one mug"})</span>
-            <span className="font-bold">${deliveryFee.toFixed(2)}</span>
+          <div className="mt-3 rounded-xl bg-white/15 px-4 py-2 text-xs text-white/90">
+            <div className="flex items-center justify-between">
+              <span>Delivery fee ({qty} {qty > 1 ? "mugs" : "mug"})</span>
+              <span className="font-bold">${deliveryFee.toFixed(2)}</span>
+            </div>
+            {qty > 1 && (
+              <p className="mt-1 text-[10px] text-white/70">
+                ${DELIVERY_FEE.toFixed(2)} first mug + ${ADDITIONAL_ITEM_DELIVERY_FEE.toFixed(2)} × {qty - 1} extra
+              </p>
+            )}
           </div>
         )}
 

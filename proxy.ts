@@ -21,6 +21,14 @@ const SENSITIVE_PATTERNS = [
   /\.(log|bak|sql|zip|tar|gz|rar|map|pem|key|p12)$/i,
   /\.(sh|bat|cmd|ps1)$/i,
   /\.(pdf|csv|db|sqlite|sqlite3)$/i,
+  /\.(ts|tsx|jsx|mjs|cjs|mts|cts)$/i,
+  /\.(env|local|example|sample|template)$/i,
+  /\.(swp|swo|orig|rej)$/i,
+  /eslint\.config/i,
+  /postcss\.config/i,
+  /\.eslintrc/i,
+  /\.(ya?ml|toml|ini|conf)$/i,
+  /\/(app|components|lib|hooks|data|utils|server|config)\//i,
 ];
 
 export function proxy(request: NextRequest) {
